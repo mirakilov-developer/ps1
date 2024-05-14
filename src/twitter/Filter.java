@@ -3,7 +3,10 @@
  */
 package twitter;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Filter consists of methods that filter a list of tweets for those matching a
@@ -27,7 +30,14 @@ public class Filter {
      *         in the same order as in the input list.
      */
     public static List<Tweet> writtenBy(List<Tweet> tweets, String username) {
-        throw new RuntimeException("not implemented");
+        List<Tweet> tweetsByAuthor = new ArrayList<>();
+        for(Tweet tw: tweets) {
+            if(tw.getAuthor().equals(username)) {
+                tweetsByAuthor.add(tw);
+            }
+        }
+
+        return tweetsByAuthor;
     }
 
     /**
@@ -41,7 +51,14 @@ public class Filter {
      *         in the same order as in the input list.
      */
     public static List<Tweet> inTimespan(List<Tweet> tweets, Timespan timespan) {
-        throw new RuntimeException("not implemented");
+        List<Tweet> tweetsInTimespan = new ArrayList<>();
+        for(Tweet tw: tweets) {
+            if(tw.getTimestamp().isAfter(timespan.getStart()) && tw.getTimestamp().isBefore(timespan.getEnd())) {
+                tweetsInTimespan.add(tw);
+            }
+        }
+
+        return tweetsInTimespan;
     }
 
     /**
@@ -60,7 +77,20 @@ public class Filter {
      *         same order as in the input list.
      */
     public static List<Tweet> containing(List<Tweet> tweets, List<String> words) {
-        throw new RuntimeException("not implemented");
-    }
+        List<Tweet> filtered = new ArrayList<>();
+        
+        Set<String> specialWords = new HashSet<>();
+        for(String word: words) specialWords.add(word.toLowerCase());
+        
+        for(Tweet tw: tweets) {
+            for(String word: tw.getText().split("[\\s.,!]")) {
+                if(specialWords.contains(word.toLowerCase())) {
+                    filtered.add(tw);
+                    break;
+                }
+            }
+        }
 
+        return filtered;
+    }
 }

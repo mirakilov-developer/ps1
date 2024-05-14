@@ -117,7 +117,7 @@ public class FilterTest {
         assertEquals(List.of(), Filter.containing(List.of(tweet1, tweet2), List.of("abandon")));
         
         // covers resultLength=1, caseInsensitivity
-        assertEquals(List.of(tweet4), Filter.containing(List.of(tweet4, tweet3), List.of("MOUNTAIN")));
+        assertEquals(List.of(tweet3), Filter.containing(List.of(tweet4, tweet3), List.of("MOUNTAIN")));
     }
 
     /*

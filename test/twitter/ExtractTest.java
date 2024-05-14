@@ -20,7 +20,7 @@ public class ExtractTest {
     private static final Instant d3 = Instant.parse("2024-05-17T11:01:50Z");
     private static final Instant d4 = Instant.parse("2024-05-17T11:24:58Z");
     
-    private static final Tweet tweet1 = new Tweet(1, "Useful contacts.", "loypugo@gmail.com, @Madeline @Theo", d1);
+    private static final Tweet tweet1 = new Tweet(1, "Clara", "loypugo@gmail.com, @Madeline @Theo", d1);
     private static final Tweet tweet2 = new Tweet(2, "Madeline", "Started to climb Celeste mountain.   @  @Wierd@@ #climbing #celeste", d2);
     private static final Tweet tweet3 = new Tweet(3, "Theo", "I found interesting person while climbing to mountain! @madeline #celeste #selfie", d3);
     private static final Tweet tweet4 = new Tweet(4, "Madeline", "Reached Summit! (Selfie with Theo).\n@Theo #climbing #celeste #summit", d4);
@@ -60,10 +60,9 @@ public class ExtractTest {
         assertEquals("expected end", d4, timespanC.getEnd());
     }
 
-
     /*
      * 
-     * Testing strategy for getTimespan:
+     * Testing strategy for getMentionedUsers:
      *      tweetsLength: 1, >1
      *      resultLength: 0, >0
      *      containsEmail
@@ -73,7 +72,7 @@ public class ExtractTest {
      */
 
     @Test
-    public void testGetMentionedUsersNoMention() {
+    public void testGetMentionedUsers() {
         
         // covers tweetsLength=1, resultLength=0, containsWierdUsageOf@
         List<Tweet> tweetsA = List.of(tweet2);

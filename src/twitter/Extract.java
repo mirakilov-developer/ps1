@@ -5,6 +5,7 @@ package twitter;
 
 import java.util.List;
 import java.util.Set;
+import java.time.Instant;
 
 /**
  * Extract consists of methods that extract information from a list of tweets.
@@ -19,7 +20,8 @@ public class Extract {
      * Get the time period spanned by tweets.
      * 
      * @param tweets
-     *            list of tweets with distinct ids, not modified by this method.
+     *          list of tweets with distinct ids, not modified by this method.
+     *          tweets.length > 0
      * @return a minimum-length time interval that contains the timestamp of
      *         every tweet in the list.
      */
@@ -32,6 +34,7 @@ public class Extract {
      * 
      * @param tweets
      *            list of tweets with distinct ids, not modified by this method.
+     *            tweets.length > 0
      * @return the set of usernames who are mentioned in the text of the tweets.
      *         A username-mention is "@" followed by a Twitter username (as
      *         defined by Tweet.getAuthor()'s spec).

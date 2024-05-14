@@ -7,42 +7,91 @@ import static org.junit.Assert.*;
 
 import java.time.Instant;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 
 import org.junit.Test;
 
 public class ExtractTest {
 
-    /*
-     * TODO: your testing strategies for these methods should go here.
-     * See the ic03-testing exercise for examples of what a testing strategy comment looks like.
-     * Make sure you have partitions.
-     */
     
-    private static final Instant d1 = Instant.parse("2016-02-17T10:00:00Z");
-    private static final Instant d2 = Instant.parse("2016-02-17T11:00:00Z");
+    private static final Instant d1 = Instant.parse("2024-05-17T10:00:00Z");
+    private static final Instant d2 = Instant.parse("2024-05-17T11:00:00Z");
+    private static final Instant d3 = Instant.parse("2024-05-17T11:01:50Z");
+    private static final Instant d4 = Instant.parse("2024-05-17T11:24:58Z");
     
-    private static final Tweet tweet1 = new Tweet(1, "alyssa", "is it reasonable to talk about rivest so much?", d1);
-    private static final Tweet tweet2 = new Tweet(2, "bbitdiddle", "rivest talk in 30 minutes #hype", d2);
+    private static final Tweet tweet1 = new Tweet(1, "Useful contacts.", "loypugo@gmail.com, @Madeline @Theo", d1);
+    private static final Tweet tweet2 = new Tweet(2, "Madeline", "Started to climb Celeste mountain. #climbing #celeste", d2);
+    private static final Tweet tweet3 = new Tweet(3, "Theo", "I found interesting person while climbing to mountain! @madeline #celeste #selfie", d3);
+    private static final Tweet tweet4 = new Tweet(4, "Madeline", "Reached Summit! (Selfie with Theo). @Theo #climbing #celeste #summit", d4);
     
     @Test(expected=AssertionError.class)
     public void testAssertionsEnabled() {
         assert false; // make sure assertions are enabled with VM argument: -ea
     }
+
+    /*
+     * 
+     * Testing strategy for getTimespan:
+     *      max - min: 0, >0
+     *      tweets.length: 1, 2, >2
+     * 
+     */
     
     @Test
     public void testGetTimespanTwoTweets() {
-        Timespan timespan = Extract.getTimespan(Arrays.asList(tweet1, tweet2));
         
-        assertEquals("expected start", d1, timespan.getStart());
-        assertEquals("expected end", d2, timespan.getEnd());
+        // covers max-min=0, tweets.length=1
+        List<Tweet> tweetsA = List.of(tweet1);
+        Timespan timespanA = Extract.getTimespan(tweetsA);
+        assertEquals("expected start", d1, timespanA.getStart());
+        assertEquals("expected end", d1, timespanA.getEnd());
+        
+        // covers tweets.length=2, max-min>0
+        List<Tweet> tweetsB = List.of(tweet2, tweet1);
+        Timespan timespanB = Extract.getTimespan(tweetsB);
+        assertEquals("expected start", d1, timespanB.getStart());
+        assertEquals("expected end", d2, timespanB.getEnd());
+        
+        // covers tweets.length>2, max-min>0
+        List<Tweet> tweetsC = List.of(tweet2, tweet3, tweet4);
+        Timespan timespanC = Extract.getTimespan(tweetsC);
+        assertEquals("expected start", d2, timespanC.getStart());
+        assertEquals("expected end", d4, timespanC.getEnd());
     }
-    
+
+
+    /*
+     * 
+     * Testing strategy for getTimespan:
+     *      tweetsLength: 1, >1
+     *      resultLength: 0, >0
+     *      containsEmail
+     *      containsSameMentions
+     */
+
     @Test
     public void testGetMentionedUsersNoMention() {
-        Set<String> mentionedUsers = Extract.getMentionedUsers(Arrays.asList(tweet1));
         
-        assertTrue("expected empty set", mentionedUsers.isEmpty());
+        // covers tweetsLength=1, resultLength=0
+        List<Tweet> tweetsA = List.of(tweet2);
+        Set<String> mentionedUsersA = Extract.getMentionedUsers(tweetsA);
+        assertTrue("expected empty set", mentionedUsersA.isEmpty());
+
+        // covers tweetsLength=1, resultLength>0, containsEmail
+        List<Tweet> tweetsB = List.of(tweet1);
+        Set<String> mentionedUsersB = Extract.getMentionedUsers(tweetsB);
+        assertEquals(mentionedUsersB, Set.of("@madeline", "@theo"));
+        
+        // covers tweetsLength>1, resultLength>0
+        List<Tweet> tweetsC = List.of(tweet2, tweet3);
+        Set<String> mentionedUsersC = Extract.getMentionedUsers(tweetsC);
+        assertEquals(mentionedUsersC, Set.of("@madeline"));
+
+        // covers tweetsLength>1, resultLength>0, containsEmail, containsSameMentions
+        List<Tweet> tweetsD = List.of(tweet1, tweet3);
+        Set<String> mentionedUsersD = Extract.getMentionedUsers(tweetsD);
+        assertEquals(mentionedUsersD, Set.of("@madeline", "@theo"));
     }
 
     /*

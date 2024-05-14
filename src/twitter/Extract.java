@@ -63,7 +63,8 @@ public class Extract {
         return mentions;
     }
     
-    private static Set<String> getMentions(String tweetText) {
+    // DIDN'T TESTED ITSELF
+    public static Set<String> getMentions(String tweetText) {
         Set<String> mentions = new HashSet<>();
         for(String word: tweetText.split("\\s")) {
             if(word.length() >= 2 && word.charAt(0) == '@' && word.chars().filter(ch -> ch == '@').count() == 1) {

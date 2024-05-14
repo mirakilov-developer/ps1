@@ -19,8 +19,6 @@ public class FilterTest {
      * Make sure you have partitions.
      */
     
-     
-    
     private static final Instant d1 = Instant.parse("2024-05-17T10:00:00Z");
     private static final Instant d2 = Instant.parse("2024-05-17T11:00:00Z");
     private static final Instant d3 = Instant.parse("2024-05-17T11:01:50Z");

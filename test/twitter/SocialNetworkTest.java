@@ -37,7 +37,7 @@ public class SocialNetworkTest {
 
     // LOL USED GPT TO GENERATE TWEETS 😂
     private static final Tweet tweet1 = new Tweet(1, "Madeline", "Just finished my morning yoga session, feeling centered and ready to take on the day! #yoga #mindfulness @Lila @Emma", d1);
-    private static final Tweet tweet2 = new Tweet(2, "Sam", "Enjoying a cup of coffee while brainstorming ideas for my next project. Any suggestions? ☕️💡 @Alex @Sophie", d2);
+    private static final Tweet tweet2 = new Tweet(2, "Sam", "Enjoying a cup of coffee while brainstorming ideas for my next project. Any suggestions? ☕️💡 @Alex @SoPHie", d2);
     private static final Tweet tweet3 = new Tweet(3, "Alex", "Caught up with an old friend over lunch today, reminiscing about the good old days. Friendship truly is timeless. 🍽️👫 @Madeline @Sophie", d3);
     private static final Tweet tweet4 = new Tweet(4, "Emma", "Feeling inspired after attending a thought-provoking lecture on sustainable living. Small changes can make a big difference! 🌱♻️ @Sam @Michael", d4);
     private static final Tweet tweet5 = new Tweet(5, "Chris", "Just finished a refreshing hike in the mountains, nature never fails to amaze me. 🏞️ @Lila @Sophie", d5);
@@ -67,14 +67,13 @@ public class SocialNetworkTest {
     }
     
     @Test
-    public void testGuessFollowsGraphEmpty() {
-        
+    public void testGuessFollowsGraph() {
         Map<String, Set<String>> followsGraphA = SocialNetwork.guessFollowsGraph(List.of(tweet2, tweet3, tweet5));
         Map<String, Set<String>> correctOutputA = Map.of(
-            "Sophie", Set.of("Sam", "Alex", "Chris"),
-            "Alex", Set.of("Sam"),
-            "Madeline", Set.of("Alex"),
-            "Lila", Set.of("Chris")
+            "sophie", Set.of("sam", "alex", "chris"),
+            "alex", Set.of("sam"),
+            "madeline", Set.of("alex"),
+            "lila", Set.of("chris")
             );
         assertEquals(correctOutputA, followsGraphA);
 
@@ -83,21 +82,24 @@ public class SocialNetworkTest {
     }
     
     @Test
-    public void testInfluencersEmpty() {
+    public void testInfluencers() {
         Map<String, Set<String>> followsGraphA = Map.of(
-            "Sophie", Set.of("Sam", "Alex", "Chris", "Matthew"),
-            "Alex", Set.of("Sam", "Egor"),
-            "Madeline", Set.of("Alex", "Alva"),
-            "Lila", Set.of("Chris"),
-            "Saimon", Set.of()
+            "sophie", Set.of("sam", "alex", "chris", "matthew"),
+            "alex", Set.of("sam", "egor"),
+            "madeline", Set.of("alex", "saimon"),
+            "lila", Set.of("chris"),
+            "saimon", Set.of()
         );
 
         List<String> influencersA = SocialNetwork.influencers(followsGraphA);
-        assertEquals(List.of("Sophie", "Alex", "Madeline", "Lila", "Saimon"), influencersA);
+        assertTrue(
+            List.of("sophie", "alex", "madeline", "lila", "saimon").equals(influencersA) ||
+            List.of("sophie", "madeline", "alex", "lila", "saimon").equals(influencersA)
+        );
 
         Map<String, Set<String>> followsGraphB = new HashMap<>();
         List<String> influencersB = SocialNetwork.influencers(followsGraphB);
-        assertEquals(Map.of(), influencersB);
+        assertEquals(List.of(), influencersB);
     }
 
     /*
